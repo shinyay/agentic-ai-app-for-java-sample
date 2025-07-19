@@ -1,15 +1,10 @@
 package com.vibecode.studio.config;
 
-import com.vibecode.studio.service.agent.ChatClient;
-import com.vibecode.studio.service.agent.MockChatClient;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AIConfig {
-    
-    @Bean
-    public ChatClient chatClient() {
-        return new MockChatClient();
-    }
+    // ChatClient implementations are now auto-configured based on vibecode.ai.provider property
+    // - AzureChatClient: when vibecode.ai.provider=azure
+    // - MockChatClient: when vibecode.ai.provider=mock (default)
 }

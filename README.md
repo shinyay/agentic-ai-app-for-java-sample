@@ -68,6 +68,7 @@ This Java backend implementation provides the core services for VibeCode Studio:
 - Java 17+
 - Maven 3.6+
 - PostgreSQL 12+ (for production) or H2 (for development/testing)
+- Azure AI Foundry account (for LLM integration) or fallback to mock mode
 
 ### Installation
 
@@ -77,14 +78,26 @@ git clone https://github.com/shinyay/agentic-ai-app-for-java-sample.git
 cd agentic-ai-app-for-java-sample
 ```
 
-2. **Configure application properties**
-```bash
-# Copy and edit application.properties
-cp src/main/resources/application.properties.example src/main/resources/application.properties
+2. **Configure Azure AI Foundry Integration**
 
-# Set your database connection and OpenAI API key
-export OPENAI_API_KEY=your-api-key-here
-export DATABASE_URL=jdbc:postgresql://localhost:5432/vibecode_studio
+For production use with Azure AI Foundry:
+```bash
+# Set your Azure AI environment variables
+export AZURE_AI_ENDPOINT=https://your-resource.openai.azure.com/
+export AZURE_AI_KEY=your-azure-api-key
+export AZURE_AI_DEPLOYMENT=gpt-4
+
+# Or edit src/main/resources/application-prod.properties
+vibecode.ai.provider=azure
+vibecode.ai.azure.endpoint=${AZURE_AI_ENDPOINT}
+vibecode.ai.azure.key=${AZURE_AI_KEY}
+vibecode.ai.azure.deployment-name=${AZURE_AI_DEPLOYMENT}
+```
+
+For development with mock AI responses:
+```bash
+# Uses application-dev.properties with vibecode.ai.provider=mock
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 3. **Build and run**
@@ -95,11 +108,35 @@ mvn clean compile
 # Run tests
 mvn test
 
-# Start the application
-mvn spring-boot:run
+# Start with development profile (uses H2 database + mock AI)
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Start with production profile (uses PostgreSQL + Azure AI Foundry)
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
 The application will start on `http://localhost:8080/api`
+
+### AI Provider Configuration
+
+VibeCode Studio supports multiple AI providers through configuration:
+
+#### Azure AI Foundry (Recommended for Production)
+```properties
+vibecode.ai.provider=azure
+vibecode.ai.azure.endpoint=https://your-resource.openai.azure.com/
+vibecode.ai.azure.key=your-azure-api-key
+vibecode.ai.azure.deployment-name=gpt-4
+vibecode.ai.azure.temperature=0.7
+vibecode.ai.azure.max-tokens=2048
+```
+
+#### Mock AI (Development & Testing)
+```properties
+vibecode.ai.provider=mock
+```
+
+The mock provider generates realistic responses for testing without incurring API costs.
 
 ### Usage
 

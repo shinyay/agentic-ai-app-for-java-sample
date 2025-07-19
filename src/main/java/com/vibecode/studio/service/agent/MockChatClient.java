@@ -1,8 +1,10 @@
 package com.vibecode.studio.service.agent;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
+@ConditionalOnProperty(name = "vibecode.ai.provider", havingValue = "mock", matchIfMissing = true)
 public class MockChatClient implements ChatClient {
     
     @Override

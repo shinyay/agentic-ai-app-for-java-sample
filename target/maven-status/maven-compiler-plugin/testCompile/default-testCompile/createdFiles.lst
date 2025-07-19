@@ -1,3 +1,4 @@
+com/vibecode/studio/service/agent/ChatClientIntegrationTest.class
 com/vibecode/studio/service/guardrail/GuardRailEngineTest.class
 com/vibecode/studio/service/cost/CostSentinelTest.class
 com/vibecode/studio/controller/ApiIntegrationTest.class

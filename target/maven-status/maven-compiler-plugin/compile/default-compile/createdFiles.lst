@@ -1,6 +1,7 @@
 com/vibecode/studio/service/agent/ChatResponse.class
 com/vibecode/studio/controller/ProjectController$CreateProjectRequest.class
 com/vibecode/studio/controller/ChatController$SendMessageRequest.class
+com/vibecode/studio/config/AIProperties$Azure.class
 com/vibecode/studio/service/guardrail/GuardRailValidationResult.class
 com/vibecode/studio/service/cost/CostSummary.class
 com/vibecode/studio/controller/ProjectController.class
@@ -11,6 +12,7 @@ com/vibecode/studio/service/agent/AgentCore.class
 com/vibecode/studio/controller/ChatController$CreateChatSessionRequest.class
 com/vibecode/studio/model/Project$ProjectStatus.class
 com/vibecode/studio/controller/ChatController$CodeGenerationResponse.class
+com/vibecode/studio/service/agent/AzureChatClient.class
 com/vibecode/studio/config/AIConfig.class
 com/vibecode/studio/controller/ChatController$CodeGenerationRequest.class
 com/vibecode/studio/controller/ProjectController$ProjectCreationResponse.class
@@ -34,6 +36,7 @@ com/vibecode/studio/repository/CostEntryRepository.class
 com/vibecode/studio/service/agent/ChatClient.class
 com/vibecode/studio/service/agent/ChatResponse$ChatResult.class
 com/vibecode/studio/controller/GuardRailController$ValidationRequest.class
+com/vibecode/studio/config/AIProperties.class
 com/vibecode/studio/service/cost/CostAlert$AlertLevel.class
 com/vibecode/studio/controller/GuardRailController.class
 com/vibecode/studio/controller/GuardRailController$GuardRailStatus.class
