@@ -63,6 +63,37 @@ This Java backend implementation provides the core services for VibeCode Studio:
 
 ## 🚀 Getting Started
 
+### Option 1: Dev Container (Recommended) 🐳
+
+The fastest way to get started with a complete development environment:
+
+**Prerequisites**: 
+- [VS Code](https://code.visualstudio.com/) with [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+
+**Quick Start**:
+```bash
+# Clone and open in VS Code
+git clone https://github.com/shinyay/agentic-ai-app-for-java-sample.git
+cd agentic-ai-app-for-java-sample
+code .
+
+# When prompted, click "Reopen in Container"
+# Or: Ctrl/Cmd + Shift + P → "Dev Containers: Reopen in Container"
+```
+
+**What you get automatically**:
+- ✅ Java 17 & Maven pre-configured
+- ✅ PostgreSQL database running on port 5432
+- ✅ pgAdmin UI available at http://localhost:8081
+- ✅ VS Code extensions for Java development
+- ✅ Development profile auto-configured
+- ✅ Auto-compilation and IntelliSense ready
+
+📖 **[Read the complete Dev Container guide](.devcontainer/README.md)**
+
+### Option 2: Manual Setup
+
 ### Requirements
 
 - Java 17+
