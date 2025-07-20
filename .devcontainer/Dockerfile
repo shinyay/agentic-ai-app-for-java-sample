@@ -49,7 +49,8 @@ RUN npm install -g @modelcontextprotocol/cli \
     && npm install -g @modelcontextprotocol/server-filesystem \
     && npm install -g @modelcontextprotocol/server-brave-search \
     && npm install -g @modelcontextprotocol/server-sqlite \
-    && npm install -g @modelcontextprotocol/server-memory
+    && npm install -g @modelcontextprotocol/server-memory \
+    && npm install -g @azure/mcp-server-azure
 
 # Create MCP configuration directory
 RUN mkdir -p /home/vscode/.config/mcp

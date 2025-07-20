@@ -54,6 +54,16 @@ The Dev Container includes the following MCP servers optimized for Java/Spring B
   - Maintain development session state
   - Cross-session knowledge retention
 
+### 6. **Azure MCP Server** (`@azure/mcp-server-azure`)
+- **Purpose**: Azure resource management and operations
+- **Capabilities**:
+  - Manage Azure resources (VMs, databases, storage)
+  - Deploy applications to Azure services
+  - Monitor Azure resource health and costs
+  - Access Azure AI services and APIs
+  - Integration with Azure DevOps and GitHub Actions
+- **Environment**: Requires Azure service principal credentials
+
 ## 🚀 Usage Examples
 
 ### Setting Up Environment Variables
@@ -64,6 +74,12 @@ export GITHUB_TOKEN="your_github_personal_access_token"
 
 # Brave Search integration  
 export BRAVE_API_KEY="your_brave_search_api_key"
+
+# Azure integration (Service Principal)
+export AZURE_CLIENT_ID="your_azure_application_client_id"
+export AZURE_CLIENT_SECRET="your_azure_client_secret"
+export AZURE_TENANT_ID="your_azure_directory_tenant_id"
+export AZURE_SUBSCRIPTION_ID="your_azure_subscription_id"
 ```
 
 ### MCP Server Configuration
@@ -83,6 +99,16 @@ The servers are configured in `~/.config/mcp/servers.json`:
     "filesystem": {
       "command": "npx",
       "args": ["@modelcontextprotocol/server-filesystem", "/workspaces/agentic-ai-app-for-java-sample"]
+    },
+    "azure": {
+      "command": "npx",
+      "args": ["@azure/mcp-server-azure"],
+      "env": {
+        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
+        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}",
+        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
+        "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}"
+      }
     }
     // ... other servers
   }
@@ -100,6 +126,9 @@ mcp inspect github
 
 # Test filesystem server
 mcp inspect filesystem
+
+# Test Azure server
+mcp inspect azure
 ```
 
 ## 🎨 AI Development Scenarios
@@ -131,6 +160,16 @@ mcp inspect filesystem
 # - Access real-time technology information
 ```
 
+### 4. **Azure Cloud Operations**
+```bash
+# AI can now:
+# - Deploy Spring Boot applications to Azure App Service
+# - Manage Azure databases (PostgreSQL, SQL Server)
+# - Configure Azure AI services integration
+# - Monitor Azure resources and costs
+# - Set up CI/CD pipelines with Azure DevOps
+```
+
 ## 🔒 Security Considerations
 
 - **Filesystem Access**: Limited to project directory only
@@ -157,6 +196,12 @@ cat ~/.config/mcp/servers.json
 # Add to your shell profile (~/.bashrc or ~/.zshrc)
 export GITHUB_TOKEN="your_token_here"
 export BRAVE_API_KEY="your_api_key_here"
+
+# Azure Service Principal (recommended for development)
+export AZURE_CLIENT_ID="your_client_id_here"
+export AZURE_CLIENT_SECRET="your_client_secret_here"
+export AZURE_TENANT_ID="your_tenant_id_here"
+export AZURE_SUBSCRIPTION_ID="your_subscription_id_here"
 ```
 
 ### Permission Issues
@@ -171,7 +216,9 @@ sudo chown -R vscode:vscode /workspaces/agentic-ai-app-for-java-sample/data
 - [MCP Specification](https://modelcontextprotocol.io/)
 - [GitHub MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/github)
 - [FileSystem MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem)
+- [Azure MCP Server](https://github.com/Azure/azure-mcp)
 - [Brave Search API](https://api.search.brave.com/)
+- [Azure Service Principal Setup](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal)
 
 ## 🔄 Integration with VibeCode Studio
 
@@ -181,5 +228,6 @@ The MCP servers integrate seamlessly with VibeCode Studio's Agent Core:
 2. **Intelligent Code Generation**: Real-time access to documentation and best practices
 3. **Database Operations**: Direct SQL query generation and execution
 4. **Persistent Memory**: Conversation context across development sessions
+5. **Azure Cloud Integration**: Seamless deployment and management of Azure resources
 
-This creates a truly intelligent development environment where AI can understand your project comprehensively and provide contextually relevant assistance.
+This creates a truly intelligent development environment where AI can understand your project comprehensively, provide contextually relevant assistance, and deploy applications directly to Azure cloud services.

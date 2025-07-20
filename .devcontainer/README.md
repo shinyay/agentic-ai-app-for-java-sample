@@ -115,6 +115,7 @@ When running with `dev` profile, you can also access the H2 in-memory database:
   - Brave Search for web research capabilities
   - SQLite for database operations
   - Memory for conversation context management
+  - **Azure MCP Server** - Azure resource management and deployment operations
 
 ### Environment Variables
 - `SPRING_PROFILES_ACTIVE=dev` - Activates development profile
@@ -124,6 +125,10 @@ When running with `dev` profile, you can also access the H2 in-memory database:
 - `NODE_PATH` - Node.js modules path for MCP servers
 - `GITHUB_TOKEN` - (Optional) GitHub Personal Access Token for MCP
 - `BRAVE_API_KEY` - (Optional) Brave Search API key for MCP
+- `AZURE_CLIENT_ID` - (Optional) Azure Application (client) ID for Azure MCP
+- `AZURE_CLIENT_SECRET` - (Optional) Azure Client Secret for Azure MCP
+- `AZURE_TENANT_ID` - (Optional) Azure Directory (tenant) ID for Azure MCP
+- `AZURE_SUBSCRIPTION_ID` - (Optional) Azure Subscription ID for Azure MCP
 
 ### Auto-completion & IntelliSense
 - Java language support with error detection
@@ -159,6 +164,7 @@ az webapp list
 # Test MCP servers
 mcp list-servers
 mcp inspect filesystem
+mcp inspect azure
 ```
 
 ## 🔍 Troubleshooting
