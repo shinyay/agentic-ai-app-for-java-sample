@@ -17,7 +17,9 @@ This directory contains the development container configuration for **VibeCode S
 
 2. **Wait for Setup**: The container will automatically:
    - Install Java 17 and Maven
+   - Install Azure CLI and Node.js
    - Set up PostgreSQL database
+   - Install MCP (Model Context Protocol) servers
    - Install VS Code extensions
    - Run `mvn clean compile`
 
@@ -42,7 +44,10 @@ This directory contains the development container configuration for **VibeCode S
 │ • Java 17           │ • PostgreSQL 15                  │
 │ • Maven 3.9         │ • Database: vibecode_studio      │
 │ • Spring Boot       │ • User: vibecode                  │
-│ • VS Code Extensions│ • Auto-initialization             │
+│ • Azure CLI         │ • Auto-initialization             │
+│ • Node.js 20        │                                   │
+│ • MCP Servers       │                                   │
+│ • VS Code Extensions│                                   │
 └─────────────────────┴───────────────────────────────────┘
 ```
 
@@ -81,15 +86,28 @@ When running with `dev` profile, you can also access the H2 in-memory database:
 - **Java Extension Pack** - Complete Java development tools
 - **Spring Boot Extensions** - Spring Boot development and dashboard
 - **Maven for Java** - Maven integration
+- **Azure CLI Tools** - Azure cloud operations and management
 - **Thunder Client** - API testing (alternative to Postman)
 - **GitLens** - Enhanced Git capabilities
 - **Docker** - Container management
+
+### Cloud & AI Integration
+- **Azure CLI** - Manage Azure resources and services
+- **MCP Servers** - Model Context Protocol for enhanced AI development
+  - GitHub integration for repository operations
+  - FileSystem access for project structure analysis
+  - Brave Search for web research capabilities
+  - SQLite for database operations
+  - Memory for conversation context management
 
 ### Environment Variables
 - `SPRING_PROFILES_ACTIVE=dev` - Activates development profile
 - `AI_PROVIDER=mock` - Uses mock AI client for development
 - `JAVA_HOME` - Java 17 installation path
 - `MAVEN_HOME` - Maven installation path
+- `NODE_PATH` - Node.js modules path for MCP servers
+- `GITHUB_TOKEN` - (Optional) GitHub Personal Access Token for MCP
+- `BRAVE_API_KEY` - (Optional) Brave Search API key for MCP
 
 ### Auto-completion & IntelliSense
 - Java language support with error detection
@@ -117,6 +135,14 @@ mvn package
 
 # Run integration tests
 mvn verify
+
+# Azure CLI operations (if authenticated)
+az account show
+az webapp list
+
+# Test MCP servers
+mcp list-servers
+mcp inspect filesystem
 ```
 
 ## 🔍 Troubleshooting
@@ -147,6 +173,9 @@ mvn verify
 - [Dev Containers Documentation](https://code.visualstudio.com/docs/devcontainers/containers)
 - [Spring Boot Developer Tools](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools)
 - [VS Code Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
+- [Azure CLI Documentation](https://docs.microsoft.com/en-us/cli/azure/)
+- [MCP Integration Guide](.devcontainer/MCP_INTEGRATION.md) - Detailed MCP servers documentation
+- [Azure AI Integration Guide](../AZURE_AI_INTEGRATION.md) - Azure AI Foundry setup
 
 ## 🔐 Security Notes
 

@@ -13,6 +13,8 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - AI_PROVIDER=mock
       - JWT_SECRET=vibecode-studio-secret-key-for-dev
+      - NODE_PATH=/usr/local/share/npm-global/lib/node_modules
+      - PATH=${PATH}:/usr/local/share/npm-global/bin
     
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
