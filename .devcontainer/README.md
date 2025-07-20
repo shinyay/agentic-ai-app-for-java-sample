@@ -2,6 +2,22 @@
 
 This directory contains the development container configuration for **VibeCode Studio**, providing a complete, reproducible development environment for the Java Spring Boot application.
 
+## 📁 Dev Container Structure
+
+The Dev Container is organized into three separate files for better maintainability:
+
+- **`devcontainer.json`** - Main configuration with VS Code settings and extensions
+- **`docker-compose.yml`** - Multi-service orchestration (app, PostgreSQL, pgAdmin)
+- **`Dockerfile`** - Custom container image with all development tools
+
+### File Responsibilities
+
+| File | Purpose |
+|------|---------|
+| `devcontainer.json` | VS Code configuration, extensions, port forwarding, environment |
+| `docker-compose.yml` | Service orchestration, volumes, networking, dependencies |
+| `Dockerfile` | Base image setup, tool installation, MCP servers |
+
 ## 🚀 Quick Start
 
 ### Prerequisites
