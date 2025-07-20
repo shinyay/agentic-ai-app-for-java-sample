@@ -25,7 +25,7 @@ class ApiIntegrationTest {
     
     @Test
     void testGuardRailStatus() throws Exception {
-        mockMvc.perform(get("/api/guardrail/status"))
+        mockMvc.perform(get("/guardrail/status"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.enabled").value(true))
                 .andExpect(jsonPath("$.message").exists());
@@ -40,7 +40,7 @@ class ApiIntegrationTest {
             }
             """;
         
-        mockMvc.perform(post("/api/projects/create")
+        mockMvc.perform(post("/projects/create")
                         .contentType("application/json")
                         .content(requestBody))
                 .andExpect(status().isOk())
@@ -57,7 +57,7 @@ class ApiIntegrationTest {
             }
             """;
         
-        mockMvc.perform(post("/api/guardrail/validate")
+        mockMvc.perform(post("/guardrail/validate")
                         .contentType("application/json")
                         .content(requestBody))
                 .andExpect(status().isOk())

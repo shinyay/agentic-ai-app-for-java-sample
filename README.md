@@ -182,6 +182,31 @@ mvn spring-boot:run -Dspring-boot.run.profiles=prod    # PostgreSQL + Azure AI
 
 The application will start on `http://localhost:8080/api`
 
+### Development Mode Testing (No Azure Required)
+
+For thorough testing without Azure credentials, use development mode:
+
+```bash
+# Run all unit and integration tests
+mvn test
+
+# Start in development mode  
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Run comprehensive functional tests
+bash scripts/test_dev_mode.sh
+```
+
+**Development Features:**
+- ✅ H2 in-memory database (no PostgreSQL required)
+- ✅ Mock AI provider (no Azure credentials required)  
+- ✅ All API endpoints functional
+- ✅ GuardRail security validation
+- ✅ Cost tracking and budget management
+- ✅ H2 Console: `http://localhost:8080/api/h2-console`
+
+For detailed testing procedures, see [DEVELOPMENT_MODE_TESTING.md](./DEVELOPMENT_MODE_TESTING.md).
+
 ### AI Provider Configuration
 
 VibeCode Studio supports multiple AI providers through configuration:

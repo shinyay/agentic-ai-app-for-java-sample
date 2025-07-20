@@ -23,10 +23,11 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/actuator/**").permitAll()
-                .requestMatchers("/api/projects/**").permitAll() // Simplified for demo
-                .requestMatchers("/api/chat/**").permitAll()
-                .requestMatchers("/api/guardrail/**").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/projects/**").permitAll() // Simplified for demo
+                .requestMatchers("/chat/**").permitAll()
+                .requestMatchers("/guardrail/**").permitAll()
+                .requestMatchers("/h2-console/**").permitAll() // For development H2 console
                 .anyRequest().authenticated()
             );
         
