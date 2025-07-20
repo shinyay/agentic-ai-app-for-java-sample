@@ -1,0 +1,56 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
+    working_dir: /workspaces/agentic-ai-app-for-java-sample
+    
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    
+    # Environment variables
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - AI_PROVIDER=mock
+      - JWT_SECRET=vibecode-studio-secret-key-for-dev
+      - SDKMAN_DIR=/home/vscode/.sdkman
+      - JAVA_HOME=/home/vscode/.sdkman/candidates/java/current
+      - MAVEN_HOME=/home/vscode/.sdkman/candidates/maven/current
+      - NODE_PATH=/usr/local/share/npm-global/lib/node_modules
+      - PATH=${PATH}:/home/vscode/.sdkman/candidates/java/current/bin:/home/vscode/.sdkman/candidates/maven/current/bin:/usr/local/share/npm-global/bin
+    
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: vibecode
+      POSTGRES_PASSWORD: vibecode123
+      POSTGRES_DB: vibecode_studio
+    ports:
+      - "5432:5432"
+
+  # Optional: pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@vibecode.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8081:80"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:

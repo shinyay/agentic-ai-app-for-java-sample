@@ -1,28 +1,397 @@
-# Title
+# VibeCode Studio - Agentic AI App for Java
 
-## Description
+**VibeCode Studio** is a collaborative, chat-first workspace for AI-powered software development. It's "Figma for vibe coding" - a platform where anyone can describe software in natural language, iterate in a tight human-AI loop, and deploy production-ready apps while maintaining security, quality, and cost guardrails.
 
-## Demo
+> 🚀 **New: Azure CLI Integration** - Seamlessly configure Azure AI services using Azure CLI for streamlined authentication and resource management.
 
-## Features
+## 🎯 Vision & Value Proposition
 
-- feature:1
-- feature:2
+- **Idea → MVP in < 10 min**: Rapidly prototype applications through natural language conversations
+- **50% developer-time savings** on prototyping vs. traditional IDE flows
+- **Security grade A**: No critical vulnerabilities at release time through embedded guardrails
 
-## Requirement
+## ✨ Features
 
-## Usage
+This Java backend implementation provides the core services for VibeCode Studio:
 
-## Installation
+### 🛡️ GuardRail Engine (FR-3)
+- **OWASP-LLM validation**: Prompt injection detection, output safety checks
+- **Package allow-listing**: Strict mode validation of dependencies  
+- **Security pattern detection**: Identifies common vulnerability patterns
+- **Configurable policies**: Enable/disable specific security checks
 
-## References
+### 💰 Cost Sentinel (FR-4)
+- **Token tracking**: Monitor API usage and costs per project/user
+- **Budget enforcement**: Alert at 80% of monthly limits, block at 100%
+- **Real-time monitoring**: Track costs across LLM calls, builds, and deployments
+- **Usage analytics**: Detailed cost breakdowns and projections
 
-## Licence
+### 🤖 Agent Core (FR-1, FR-2)
+- **Conversational project creation**: Generate projects from natural language
+- **Iterative chat-edit**: Modify code through conversational interface
+- **Context-aware responses**: Maintain conversation history and project context
+- **Multi-format output**: Support for code generation, explanations, and refactoring
+
+### 📊 Project Management
+- **Lifecycle tracking**: Draft → Planning → Building → Testing → Deployed
+- **Version control integration**: Git repository management
+- **Cost attribution**: Per-project cost tracking and budgeting
+- **Session management**: Organized chat sessions per project
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   REST APIs     │────│   Agent Core     │────│  GuardRail      │
+│                 │    │                  │    │  Engine         │
+├─────────────────┤    ├──────────────────┤    ├─────────────────┤
+│ • Projects      │    │ • Chat Client    │    │ • OWASP Checks  │
+│ • Chat Sessions │    │ • Cost Tracking  │    │ • Package Scan  │
+│ • GuardRails    │    │ • Context Mgmt   │    │ • Security Rules │
+│ • Cost Monitor  │    │ • Validation     │    │ • Pattern Match │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+                    ┌──────────────────┐
+                    │  Cost Sentinel   │
+                    │                  │
+                    │ • Budget Limits  │
+                    │ • Usage Alerts   │
+                    │ • Token Counting │
+                    │ • Cost Analytics │
+                    └──────────────────┘
+```
+
+## 🚀 Getting Started
+
+### Option 1: Dev Container (Recommended) 🐳
+
+The fastest way to get started with a complete development environment:
+
+**Prerequisites**: 
+- [VS Code](https://code.visualstudio.com/) with [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+
+**Quick Start**:
+```bash
+# Clone and open in VS Code
+git clone https://github.com/shinyay/agentic-ai-app-for-java-sample.git
+cd agentic-ai-app-for-java-sample
+code .
+
+# When prompted, click "Reopen in Container"
+# Or: Ctrl/Cmd + Shift + P → "Dev Containers: Reopen in Container"
+```
+
+**What you get automatically**:
+- ✅ Java 24 & Maven pre-configured
+- ✅ PostgreSQL database running on port 5432
+- ✅ pgAdmin UI available at http://localhost:8081
+- ✅ VS Code extensions for Java development
+- ✅ Development profile auto-configured
+- ✅ Auto-compilation and IntelliSense ready
+
+📖 **[Read the complete Dev Container guide](.devcontainer/README.md)**
+
+### Option 2: Manual Setup
+
+### Requirements
+
+- Java 24+
+- Maven 3.6+
+- PostgreSQL 12+ (for production) or H2 (for development/testing)
+- Azure AI Foundry account (for LLM integration) or fallback to mock mode
+
+### Installation
+
+#### Option 1: Dev Container (Recommended)
+```bash
+# 1. Open in VS Code with Dev Containers extension
+code agentic-ai-app-for-java-sample
+
+# 2. Select "Reopen in Container" when prompted
+
+# 3. Authenticate with Azure CLI (optional, for AI integration)
+bash .devcontainer/azure-auth.sh login
+
+# 4. Set up Azure resources (optional, for AI integration)  
+bash .devcontainer/setup-azure.sh
+
+# 5. Start the application
+mvn spring-boot:run -Dspring-boot.run.profiles=azure  # With Azure AI
+# OR
+mvn spring-boot:run -Dspring-boot.run.profiles=dev    # Mock AI (no Azure required)
+```
+
+#### Option 2: Manual Setup
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/shinyay/agentic-ai-app-for-java-sample.git
+cd agentic-ai-app-for-java-sample
+```
+
+2. **Configure Azure AI Foundry Integration**
+
+**Using Azure CLI (Recommended):**
+```bash
+# Install Azure CLI (if not already installed)
+# See: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
+
+# Login to Azure
+az login
+
+# Create Azure AI resources automatically
+bash .devcontainer/setup-azure.sh
+
+# Run with Azure configuration
+mvn spring-boot:run -Dspring-boot.run.profiles=azure
+```
+
+**Manual Configuration:**
+```bash
+# Set your Azure AI environment variables
+export AZURE_AI_ENDPOINT=https://your-resource.openai.azure.com/
+export AZURE_AI_KEY=your-azure-api-key
+export AZURE_AI_DEPLOYMENT=gpt-4
+
+# Run with production profile
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
+```
+
+**Development Mode (No Azure Required):**
+```bash
+# Uses mock AI responses for development
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+3. **Build and run**
+```bash
+# Build the application
+mvn clean compile
+
+# Run tests
+mvn test
+
+# Start the application (choose one profile)
+mvn spring-boot:run -Dspring-boot.run.profiles=dev     # H2 database + mock AI
+mvn spring-boot:run -Dspring-boot.run.profiles=azure   # H2 database + Azure AI (after setup)
+mvn spring-boot:run -Dspring-boot.run.profiles=prod    # PostgreSQL + Azure AI
+```
+
+The application will start on `http://localhost:8080/api`
+
+### Development Mode Testing (No Azure Required)
+
+For thorough testing without Azure credentials, use development mode:
+
+```bash
+# Run all unit and integration tests
+mvn test
+
+# Start in development mode  
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Run comprehensive functional tests
+bash scripts/test_dev_mode.sh
+```
+
+**Development Features:**
+- ✅ H2 in-memory database (no PostgreSQL required)
+- ✅ Mock AI provider (no Azure credentials required)  
+- ✅ All API endpoints functional
+- ✅ GuardRail security validation
+- ✅ Cost tracking and budget management
+- ✅ H2 Console: `http://localhost:8080/api/h2-console`
+
+For detailed testing procedures, see [DEVELOPMENT_MODE_TESTING.md](./DEVELOPMENT_MODE_TESTING.md).
+
+### AI Provider Configuration
+
+VibeCode Studio supports multiple AI providers through configuration:
+
+#### Azure AI Foundry (Recommended for Production)
+```properties
+vibecode.ai.provider=azure
+vibecode.ai.azure.endpoint=https://your-resource.openai.azure.com/
+vibecode.ai.azure.key=your-azure-api-key
+vibecode.ai.azure.deployment-name=gpt-4
+vibecode.ai.azure.temperature=0.7
+vibecode.ai.azure.max-tokens=2048
+```
+
+#### Mock AI (Development & Testing)
+```properties
+vibecode.ai.provider=mock
+```
+
+The mock provider generates realistic responses for testing without incurring API costs.
+
+### Usage
+
+#### Create a Project
+```bash
+curl -X POST http://localhost:8080/api/projects/create \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Build a real-time todo app with user authentication and WebSocket updates",
+    "userId": "user123"
+  }'
+```
+
+#### Start a Chat Session
+```bash
+curl -X POST http://localhost:8080/api/chat/sessions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "projectId": 1,
+    "userId": "user123", 
+    "sessionName": "Feature Development"
+  }'
+```
+
+#### Generate Code
+```bash
+curl -X POST http://localhost:8080/api/chat/message \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sessionId": 1,
+    "message": "Create a REST controller for managing todos with CRUD operations",
+    "userId": "user123"
+  }'
+```
+
+#### Validate Code with GuardRails
+```bash
+curl -X POST http://localhost:8080/api/guardrail/validate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "public class TodoController { ... }",
+    "prompt": "Create a todo controller"
+  }'
+```
+
+## 🧪 Testing
+
+The project includes comprehensive tests for all core components:
+
+```bash
+# Run all tests
+mvn test
+
+# Run specific test classes
+mvn test -Dtest=GuardRailEngineTest
+mvn test -Dtest=CostSentinelTest
+
+# Run with coverage (if configured)
+mvn test jacoco:report
+```
+
+## 📋 API Reference
+
+### Projects API
+- `GET /api/projects?userId={userId}` - List user projects
+- `POST /api/projects/create` - Create project from prompt
+- `GET /api/projects/{id}?userId={userId}` - Get project details
+- `PUT /api/projects/{id}/status` - Update project status
+
+### Chat API  
+- `GET /api/chat/sessions?userId={userId}&projectId={projectId}` - List chat sessions
+- `POST /api/chat/sessions` - Create new chat session
+- `POST /api/chat/message` - Send message to AI agent
+- `POST /api/chat/generate-code` - Generate code from prompt
+
+### GuardRail API
+- `POST /api/guardrail/validate` - Validate code and prompt
+- `GET /api/guardrail/status` - Check GuardRail engine status
+
+## ⚙️ Configuration
+
+Key configuration properties:
+
+```properties
+# Cost Management
+vibecode.cost.default-monthly-limit=100.0
+vibecode.cost.alert-threshold=0.8
+
+# GuardRail Engine
+vibecode.guardrail.enabled=true
+vibecode.guardrail.strict-mode=false
+vibecode.guardrail.allowed-packages=org.springframework,com.fasterxml.jackson
+
+# Security  
+vibecode.security.jwt.secret=${JWT_SECRET}
+vibecode.security.jwt.expiration=86400000
+```
+
+## 🛡️ Security Features
+
+- **Prompt Injection Protection**: Detects and blocks malicious prompts
+- **Code Safety Validation**: Prevents generation of dangerous code patterns
+- **Package Whitelisting**: Restricts dependencies to approved packages
+- **Secret Detection**: Identifies potential hardcoded secrets
+- **Audit Logging**: Complete trail of all AI interactions
+
+## 📊 Cost Management
+
+- **Real-time Tracking**: Monitor API costs as they occur
+- **Budget Enforcement**: Automatic limits and alerts
+- **Usage Analytics**: Detailed breakdowns by user/project/time
+- **Predictive Alerts**: Warnings before budget exhaustion
+
+## 🔧 Development
+
+### Project Structure
+```
+src/main/java/com/vibecode/studio/
+├── VibeCodeStudioApplication.java     # Main application
+├── config/                            # Configuration classes
+├── controller/                        # REST API endpoints
+├── model/                            # JPA entities
+├── repository/                       # Data access layer
+└── service/
+    ├── agent/                        # AI agent core logic
+    ├── cost/                         # Cost tracking and budgets
+    └── guardrail/                    # Security validation
+```
+
+### Adding New Features
+
+1. Create service classes in appropriate packages
+2. Add REST endpoints in controller package
+3. Write comprehensive tests
+4. Update API documentation
+5. Add configuration properties as needed
+
+## 📈 Roadmap
+
+Future enhancements aligned with the PRD:
+
+- [ ] **Instant Preview & Deploy (FR-5)**: One-click deployment to managed hosting
+- [ ] **Marketplace SDK (FR-6)**: Plugin framework for custom tools
+- [ ] **Collaboration & Replay (FR-7)**: Multi-cursor editing and time-travel
+- [ ] **Advanced Analytics**: Detailed usage and performance metrics
+- [ ] **Enterprise Features**: SSO, advanced security, on-premise deployment
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
 
 Released under the [MIT license](https://gist.githubusercontent.com/shinyay/56e54ee4c0e22db8211e05e70a63247e/raw/f3ac65a05ed8c8ea70b653875ccac0c6dbc10ba1/LICENSE)
 
-## Author
+## 👨‍💻 Author
 
-- github: <https://github.com/shinyay>
-- twitter: <https://twitter.com/yanashin18618>
-- mastodon: <https://mastodon.social/@yanashin>
+- **GitHub**: <https://github.com/shinyay>
+- **Twitter**: <https://twitter.com/yanashin18618>
+- **Mastodon**: <https://mastodon.social/@yanashin>
+
+---
+
+*VibeCode Studio: Democratizing software creation through conversational AI while maintaining enterprise-grade security and cost controls.*

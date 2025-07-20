@@ -1,0 +1,68 @@
+{
+  "name": "VibeCode Studio - Java Development",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/agentic-ai-app-for-java-sample",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-spring-initializr",
+        "vscjava.vscode-spring-boot-dashboard",
+        "vmware.vscode-spring-boot",
+        "redhat.java",
+        "vscjava.vscode-maven",
+        "ms-vscode.vscode-json",
+        "ms-azuretools.vscode-docker",
+        "ms-azuretools.vscode-azurecli",
+        "eamodio.gitlens",
+        "ms-vscode.vscode-thunder-client",
+        "ms-vscode.remote-repositories"
+      ],
+      "settings": {
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-21",
+            "path": "/home/vscode/.sdkman/candidates/java/current",
+            "default": true
+          }
+        ],
+        "java.compile.nullAnalysis.mode": "automatic",
+        "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m",
+        "spring-boot.ls.checkUpdate": false,
+        "files.exclude": {
+          "**/target": true,
+          "**/.classpath": true,
+          "**/.project": true,
+          "**/.settings": true,
+          "**/.factorypath": true
+        }
+      }
+    }
+  },
+
+  "forwardPorts": [8080, 5432],
+  "portsAttributes": {
+    "8080": {
+      "label": "Spring Boot Application",
+      "onAutoForward": "notify"
+    },
+    "5432": {
+      "label": "PostgreSQL Database"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup-mcp.sh && mvn clean compile",
+  
+  "remoteEnv": {
+    "SDKMAN_DIR": "/home/vscode/.sdkman",
+    "JAVA_HOME": "/home/vscode/.sdkman/candidates/java/current",
+    "MAVEN_HOME": "/home/vscode/.sdkman/candidates/maven/current",
+    "SPRING_PROFILES_ACTIVE": "dev",
+    "NODE_PATH": "/usr/local/share/npm-global/lib/node_modules",
+    "PATH": "${localEnv:PATH}:/home/vscode/.sdkman/candidates/java/current/bin:/home/vscode/.sdkman/candidates/maven/current/bin:/usr/local/share/npm-global/bin"
+  },
+
+  "remoteUser": "vscode"
+}
