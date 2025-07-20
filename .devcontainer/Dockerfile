@@ -1,5 +1,5 @@
 # VibeCode Studio - Java Development Container
-FROM mcr.microsoft.com/devcontainers/java:1-17-bullseye
+FROM mcr.microsoft.com/devcontainers/base:1-bullseye
 
 # Install system dependencies
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -11,9 +11,17 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         gnupg \
         lsb-release \
         software-properties-common \
+        zip \
+        unzip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install SDKMAN
+USER vscode
+RUN curl -s "https://get.sdkman.io" | bash
+
+# Install Azure CLI and GitHub CLI
+USER root
 # Install Azure CLI
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
@@ -33,17 +41,30 @@ RUN mkdir -p /usr/local/share/npm-global \
     && npm config set prefix '/usr/local/share/npm-global' \
     && echo 'export PATH=/usr/local/share/npm-global/bin:$PATH' >> /home/vscode/.bashrc
 
-# Install Maven 3.9 (via SDKMAN)
+# Install Java 24 and Maven via SDKMAN
 USER vscode
-RUN bash -c "source /usr/local/sdkman/bin/sdkman-init.sh && sdk install maven 3.9.6"
+RUN bash -c "source /home/vscode/.sdkman/bin/sdkman-init.sh \
+    && sdk install java 24-open \
+    && sdk install maven 3.9.6 \
+    && sdk default java 24-open \
+    && sdk default maven 3.9.6"
+
+# Add SDKMAN, Java, and Maven to PATH for all sessions
+RUN echo 'export SDKMAN_DIR="/home/vscode/.sdkman"' >> /home/vscode/.bashrc \
+    && echo '[[ -s "/home/vscode/.sdkman/bin/sdkman-init.sh" ]] && source "/home/vscode/.sdkman/bin/sdkman-init.sh"' >> /home/vscode/.bashrc \
+    && echo 'export JAVA_HOME="/home/vscode/.sdkman/candidates/java/current"' >> /home/vscode/.bashrc \
+    && echo 'export MAVEN_HOME="/home/vscode/.sdkman/candidates/maven/current"' >> /home/vscode/.bashrc \
+    && echo 'export PATH="$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH"' >> /home/vscode/.bashrc
 
 # Set up environment variables
-ENV JAVA_HOME=/usr/local/sdkman/candidates/java/current
-ENV MAVEN_HOME=/usr/local/sdkman/candidates/maven/current
+ENV SDKMAN_DIR=/home/vscode/.sdkman
+ENV JAVA_HOME=/home/vscode/.sdkman/candidates/java/current
+ENV MAVEN_HOME=/home/vscode/.sdkman/candidates/maven/current
 ENV NODE_PATH=/usr/local/share/npm-global/lib/node_modules
-ENV PATH=$PATH:/usr/local/share/npm-global/bin
+ENV PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:/usr/local/share/npm-global/bin:$PATH
 
 # Install MCP CLI and servers
+USER root
 RUN npm install -g @modelcontextprotocol/cli \
     && npm install -g @modelcontextprotocol/server-github \
     && npm install -g @modelcontextprotocol/server-filesystem \
@@ -53,6 +74,7 @@ RUN npm install -g @modelcontextprotocol/cli \
     && npm install -g @azure/mcp-server-azure
 
 # Create MCP configuration directory
+USER vscode
 RUN mkdir -p /home/vscode/.config/mcp
 
 # Copy and run MCP setup script

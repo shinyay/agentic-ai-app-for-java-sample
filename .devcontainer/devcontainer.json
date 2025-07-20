@@ -23,8 +23,8 @@
       "settings": {
         "java.configuration.runtimes": [
           {
-            "name": "JavaSE-17",
-            "path": "/usr/local/sdkman/candidates/java/current",
+            "name": "JavaSE-24",
+            "path": "/home/vscode/.sdkman/candidates/java/current",
             "default": true
           }
         ],
@@ -56,11 +56,12 @@
   "postCreateCommand": "bash .devcontainer/setup-mcp.sh && mvn clean compile",
   
   "remoteEnv": {
-    "JAVA_HOME": "/usr/local/sdkman/candidates/java/current",
-    "MAVEN_HOME": "/usr/local/sdkman/candidates/maven/current",
+    "SDKMAN_DIR": "/home/vscode/.sdkman",
+    "JAVA_HOME": "/home/vscode/.sdkman/candidates/java/current",
+    "MAVEN_HOME": "/home/vscode/.sdkman/candidates/maven/current",
     "SPRING_PROFILES_ACTIVE": "dev",
     "NODE_PATH": "/usr/local/share/npm-global/lib/node_modules",
-    "PATH": "${PATH}:/usr/local/share/npm-global/bin"
+    "PATH": "${localEnv:PATH}:/home/vscode/.sdkman/candidates/java/current/bin:/home/vscode/.sdkman/candidates/maven/current/bin:/usr/local/share/npm-global/bin"
   },
 
   "remoteUser": "vscode"

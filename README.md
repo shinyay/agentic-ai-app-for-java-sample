@@ -85,7 +85,7 @@ code .
 ```
 
 **What you get automatically**:
-- ✅ Java 17 & Maven pre-configured
+- ✅ Java 24 & Maven pre-configured
 - ✅ PostgreSQL database running on port 5432
 - ✅ pgAdmin UI available at http://localhost:8081
 - ✅ VS Code extensions for Java development
@@ -98,7 +98,7 @@ code .
 
 ### Requirements
 
-- Java 17+
+- Java 24+
 - Maven 3.6+
 - PostgreSQL 12+ (for production) or H2 (for development/testing)
 - Azure AI Foundry account (for LLM integration) or fallback to mock mode
