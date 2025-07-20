@@ -2,7 +2,7 @@
   "name": "VibeCode Studio - Java Development",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
-  "workspaceFolder": "/workspace",
+  "workspaceFolder": "/workspaces/agentic-ai-app-for-java-sample",
   
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
