@@ -20,6 +20,31 @@ The Dev Container is organized into three separate files for better maintainabil
 
 ## 🚀 Quick Start
 
+### Option 1: Azure CLI Setup (Recommended)
+```bash
+# 1. Open in Dev Container
+# - Open this repository in VS Code
+# - Click "Reopen in Container" when prompted
+# - Or: Ctrl/Cmd + Shift + P → "Dev Containers: Reopen in Container"
+
+# 2. Authenticate with Azure
+bash .devcontainer/azure-auth.sh login
+
+# 3. Set up Azure resources and configuration  
+bash .devcontainer/setup-azure.sh
+
+# 4. Start the application with Azure configuration
+mvn spring-boot:run -Dspring-boot.run.profiles=azure
+```
+
+### Option 2: Development Mode (No Azure Required)
+```bash
+# 1. Open in Dev Container (same as above)
+
+# 2. Start with development profile (uses H2 database and mock AI)
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
 ### Prerequisites
 - **Visual Studio Code** with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 - **Docker Desktop** or **Docker Engine**
@@ -39,13 +64,15 @@ The Dev Container is organized into three separate files for better maintainabil
    - Install VS Code extensions
    - Run `mvn clean compile`
 
-3. **Start Development**:
+3. **Choose Your Development Path**:
    ```bash
-   # Run the application with development profile
-   mvn spring-boot:run -Dspring-boot.run.profiles=dev
+   # For Azure-integrated development
+   bash .devcontainer/azure-auth.sh login
+   bash .devcontainer/setup-azure.sh
+   mvn spring-boot:run -Dspring-boot.run.profiles=azure
    
-   # Or run tests
-   mvn test
+   # For local development (no Azure required)
+   mvn spring-boot:run -Dspring-boot.run.profiles=dev
    ```
 
 ## 🏗️ Container Architecture
@@ -108,27 +135,37 @@ When running with `dev` profile, you can also access the H2 in-memory database:
 - **Docker** - Container management
 
 ### Cloud & AI Integration
-- **Azure CLI** - Manage Azure resources and services
+- **Azure CLI** - Manage Azure resources and services with integrated authentication
+- **Azure Authentication Helper** - Simplified Azure login and configuration
+- **Azure Resource Setup** - Automated Azure AI service provisioning
 - **MCP Servers** - Model Context Protocol for enhanced AI development
   - GitHub integration for repository operations
   - FileSystem access for project structure analysis
   - Brave Search for web research capabilities
   - SQLite for database operations
   - Memory for conversation context management
-  - **Azure MCP Server** - Azure resource management and deployment operations
+  - **Azure MCP Server** - Azure resource management and deployment operations with CLI authentication
 
 ### Environment Variables
 - `SPRING_PROFILES_ACTIVE=dev` - Activates development profile
-- `AI_PROVIDER=mock` - Uses mock AI client for development
+- `AI_PROVIDER=mock` - Uses mock AI client for development (can be changed to `azure`)
 - `JAVA_HOME` - Java 17 installation path
 - `MAVEN_HOME` - Maven installation path
 - `NODE_PATH` - Node.js modules path for MCP servers
-- `GITHUB_TOKEN` - (Optional) GitHub Personal Access Token for MCP
-- `BRAVE_API_KEY` - (Optional) Brave Search API key for MCP
-- `AZURE_CLIENT_ID` - (Optional) Azure Application (client) ID for Azure MCP
-- `AZURE_CLIENT_SECRET` - (Optional) Azure Client Secret for Azure MCP
-- `AZURE_TENANT_ID` - (Optional) Azure Directory (tenant) ID for Azure MCP
-- `AZURE_SUBSCRIPTION_ID` - (Optional) Azure Subscription ID for Azure MCP
+
+#### Azure Configuration (Optional - for Azure AI integration)
+- `AZURE_CLI_AUTH=true` - Use Azure CLI authentication (recommended)
+- `AZURE_TENANT_ID` - Azure Directory (tenant) ID (auto-detected from `az cli`)
+- `AZURE_SUBSCRIPTION_ID` - Azure Subscription ID (auto-detected from `az cli`)
+- `AZURE_AI_ENDPOINT` - Azure AI service endpoint (auto-configured by setup script)
+- `AZURE_AI_KEY` - Azure AI service key (auto-configured by setup script)
+- `AZURE_AI_DEPLOYMENT` - Azure AI model deployment name (default: gpt-4)
+
+#### MCP Integration (Optional - for enhanced AI development)
+- `GITHUB_TOKEN` - GitHub Personal Access Token for MCP GitHub server
+- `BRAVE_API_KEY` - Brave Search API key for MCP search capabilities
+- `AZURE_CLIENT_ID` - Azure Application (client) ID (alternative to CLI auth)
+- `AZURE_CLIENT_SECRET` - Azure Client Secret (alternative to CLI auth)
 
 ### Auto-completion & IntelliSense
 - Java language support with error detection
@@ -157,14 +194,19 @@ mvn package
 # Run integration tests
 mvn verify
 
-# Azure CLI operations (if authenticated)
+# Azure CLI operations (after authentication)
+bash .devcontainer/azure-auth.sh status
+bash .devcontainer/azure-auth.sh test
 az account show
 az webapp list
+
+# Setup Azure resources for AI integration
+bash .devcontainer/setup-azure.sh
 
 # Test MCP servers
 mcp list-servers
 mcp inspect filesystem
-mcp inspect azure
+mcp inspect azure  # Requires Azure CLI authentication
 ```
 
 ## 🔍 Troubleshooting

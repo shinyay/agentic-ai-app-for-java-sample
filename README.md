@@ -2,6 +2,8 @@
 
 **VibeCode Studio** is a collaborative, chat-first workspace for AI-powered software development. It's "Figma for vibe coding" - a platform where anyone can describe software in natural language, iterate in a tight human-AI loop, and deploy production-ready apps while maintaining security, quality, and cost guardrails.
 
+> 🚀 **New: Azure CLI Integration** - Seamlessly configure Azure AI services using Azure CLI for streamlined authentication and resource management.
+
 ## 🎯 Vision & Value Proposition
 
 - **Idea → MVP in < 10 min**: Rapidly prototype applications through natural language conversations
@@ -103,6 +105,27 @@ code .
 
 ### Installation
 
+#### Option 1: Dev Container (Recommended)
+```bash
+# 1. Open in VS Code with Dev Containers extension
+code agentic-ai-app-for-java-sample
+
+# 2. Select "Reopen in Container" when prompted
+
+# 3. Authenticate with Azure CLI (optional, for AI integration)
+bash .devcontainer/azure-auth.sh login
+
+# 4. Set up Azure resources (optional, for AI integration)  
+bash .devcontainer/setup-azure.sh
+
+# 5. Start the application
+mvn spring-boot:run -Dspring-boot.run.profiles=azure  # With Azure AI
+# OR
+mvn spring-boot:run -Dspring-boot.run.profiles=dev    # Mock AI (no Azure required)
+```
+
+#### Option 2: Manual Setup
+
 1. **Clone the repository**
 ```bash
 git clone https://github.com/shinyay/agentic-ai-app-for-java-sample.git
@@ -111,23 +134,35 @@ cd agentic-ai-app-for-java-sample
 
 2. **Configure Azure AI Foundry Integration**
 
-For production use with Azure AI Foundry:
+**Using Azure CLI (Recommended):**
+```bash
+# Install Azure CLI (if not already installed)
+# See: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
+
+# Login to Azure
+az login
+
+# Create Azure AI resources automatically
+bash .devcontainer/setup-azure.sh
+
+# Run with Azure configuration
+mvn spring-boot:run -Dspring-boot.run.profiles=azure
+```
+
+**Manual Configuration:**
 ```bash
 # Set your Azure AI environment variables
 export AZURE_AI_ENDPOINT=https://your-resource.openai.azure.com/
 export AZURE_AI_KEY=your-azure-api-key
 export AZURE_AI_DEPLOYMENT=gpt-4
 
-# Or edit src/main/resources/application-prod.properties
-vibecode.ai.provider=azure
-vibecode.ai.azure.endpoint=${AZURE_AI_ENDPOINT}
-vibecode.ai.azure.key=${AZURE_AI_KEY}
-vibecode.ai.azure.deployment-name=${AZURE_AI_DEPLOYMENT}
+# Run with production profile
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
-For development with mock AI responses:
+**Development Mode (No Azure Required):**
 ```bash
-# Uses application-dev.properties with vibecode.ai.provider=mock
+# Uses mock AI responses for development
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
@@ -139,11 +174,10 @@ mvn clean compile
 # Run tests
 mvn test
 
-# Start with development profile (uses H2 database + mock AI)
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
-
-# Start with production profile (uses PostgreSQL + Azure AI Foundry)
-mvn spring-boot:run -Dspring-boot.run.profiles=prod
+# Start the application (choose one profile)
+mvn spring-boot:run -Dspring-boot.run.profiles=dev     # H2 database + mock AI
+mvn spring-boot:run -Dspring-boot.run.profiles=azure   # H2 database + Azure AI (after setup)
+mvn spring-boot:run -Dspring-boot.run.profiles=prod    # PostgreSQL + Azure AI
 ```
 
 The application will start on `http://localhost:8080/api`

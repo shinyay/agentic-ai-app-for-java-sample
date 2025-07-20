@@ -66,7 +66,23 @@ The Dev Container includes the following MCP servers optimized for Java/Spring B
 
 ## 🚀 Usage Examples
 
-### Setting Up Environment Variables
+### Setting Up Environment Variables with Azure CLI
+
+The recommended approach is to use Azure CLI for authentication and configuration:
+
+```bash
+# Step 1: Authenticate with Azure CLI
+bash .devcontainer/azure-auth.sh login
+
+# Step 2: Set up Azure environment
+bash .devcontainer/azure-auth.sh env
+source azure-env.sh
+
+# Step 3: Create Azure resources (optional)
+bash .devcontainer/setup-azure.sh
+```
+
+### Manual Environment Variables (Alternative)
 
 ```bash
 # GitHub integration
@@ -75,17 +91,58 @@ export GITHUB_TOKEN="your_github_personal_access_token"
 # Brave Search integration  
 export BRAVE_API_KEY="your_brave_search_api_key"
 
-# Azure integration (Service Principal)
+# Azure integration - Option 1: Service Principal
 export AZURE_CLIENT_ID="your_azure_application_client_id"
 export AZURE_CLIENT_SECRET="your_azure_client_secret"
 export AZURE_TENANT_ID="your_azure_directory_tenant_id"
 export AZURE_SUBSCRIPTION_ID="your_azure_subscription_id"
+
+# Azure integration - Option 2: Azure CLI (Recommended)
+export AZURE_CLI_AUTH="true"
+export AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
+export AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 ```
 
 ### MCP Server Configuration
 
-The servers are configured in `~/.config/mcp/servers.json`:
+The servers can be configured using Azure CLI authentication or traditional service principal:
 
+#### Option 1: Azure CLI Authentication (Recommended)
+```json
+{
+  "servers": {
+    "azure": {
+      "command": "npx",
+      "args": ["@azure/mcp-server-azure"],
+      "env": {
+        "AZURE_CLI_AUTH": "true",
+        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
+        "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}"
+      }
+    }
+  }
+}
+```
+
+#### Option 2: Service Principal Authentication
+```json
+{
+  "servers": {
+    "azure": {
+      "command": "npx",
+      "args": ["@azure/mcp-server-azure"],
+      "env": {
+        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
+        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}",
+        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
+        "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}"
+      }
+    }
+  }
+}
+```
+
+Complete configuration in `~/.config/mcp/servers.json`:
 ```json
 {
   "servers": {
@@ -104,13 +161,11 @@ The servers are configured in `~/.config/mcp/servers.json`:
       "command": "npx",
       "args": ["@azure/mcp-server-azure"],
       "env": {
-        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
-        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}",
+        "AZURE_CLI_AUTH": "true",
         "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
         "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}"
       }
     }
-    // ... other servers
   }
 }
 ```
@@ -118,6 +173,9 @@ The servers are configured in `~/.config/mcp/servers.json`:
 ### Testing MCP Servers
 
 ```bash
+# Configure Azure authentication
+bash .devcontainer/azure-auth.sh mcp
+
 # List available MCP servers
 mcp list-servers
 
@@ -127,7 +185,7 @@ mcp inspect github
 # Test filesystem server
 mcp inspect filesystem
 
-# Test Azure server
+# Test Azure server (requires Azure CLI login)
 mcp inspect azure
 ```
 
@@ -193,11 +251,21 @@ cat ~/.config/mcp/servers.json
 
 ### Environment Variables Not Set
 ```bash
-# Add to your shell profile (~/.bashrc or ~/.zshrc)
+# Using Azure CLI (Recommended)
+bash .devcontainer/azure-auth.sh login
+bash .devcontainer/azure-auth.sh env
+source azure-env.sh
+
+# Manual setup - Add to your shell profile (~/.bashrc or ~/.zshrc)
 export GITHUB_TOKEN="your_token_here"
 export BRAVE_API_KEY="your_api_key_here"
 
-# Azure Service Principal (recommended for development)
+# Azure CLI authentication (recommended)
+export AZURE_CLI_AUTH="true"
+export AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
+export AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+
+# Alternative: Azure Service Principal 
 export AZURE_CLIENT_ID="your_client_id_here"
 export AZURE_CLIENT_SECRET="your_client_secret_here"
 export AZURE_TENANT_ID="your_tenant_id_here"
@@ -218,6 +286,7 @@ sudo chown -R vscode:vscode /workspaces/agentic-ai-app-for-java-sample/data
 - [FileSystem MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem)
 - [Azure MCP Server](https://github.com/Azure/azure-mcp)
 - [Brave Search API](https://api.search.brave.com/)
+- [Azure CLI Documentation](https://docs.microsoft.com/en-us/cli/azure/)
 - [Azure Service Principal Setup](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal)
 
 ## 🔄 Integration with VibeCode Studio
@@ -228,6 +297,14 @@ The MCP servers integrate seamlessly with VibeCode Studio's Agent Core:
 2. **Intelligent Code Generation**: Real-time access to documentation and best practices
 3. **Database Operations**: Direct SQL query generation and execution
 4. **Persistent Memory**: Conversation context across development sessions
-5. **Azure Cloud Integration**: Seamless deployment and management of Azure resources
+5. **Azure Cloud Integration**: Seamless deployment and management of Azure resources via CLI
+6. **Simplified Authentication**: Use Azure CLI login instead of managing service principal credentials
 
-This creates a truly intelligent development environment where AI can understand your project comprehensively, provide contextually relevant assistance, and deploy applications directly to Azure cloud services.
+### Azure CLI Benefits
+- **Simplified Setup**: One-command authentication with `az login`
+- **Automatic Credential Management**: No need to manage secrets manually
+- **Multi-Factor Authentication**: Supports Azure MFA and conditional access
+- **Role-Based Access**: Uses your existing Azure permissions
+- **Secure by Default**: Credentials are stored securely by Azure CLI
+
+This creates a truly intelligent development environment where AI can understand your project comprehensively, provide contextually relevant assistance, and deploy applications directly to Azure cloud services using your existing Azure credentials.
