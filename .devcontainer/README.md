@@ -57,7 +57,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
    - Or: `Ctrl/Cmd + Shift + P` → "Dev Containers: Reopen in Container"
 
 2. **Wait for Setup**: The container will automatically:
-   - Install Java 24 and Maven
+   - Install Java 21 and Maven
    - Install Azure CLI and Node.js
    - Set up PostgreSQL database
    - Install MCP (Model Context Protocol) servers
@@ -84,7 +84,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 │   Java App          │         PostgreSQL                │
 │   Container          │         Container                 │
 │                     │                                   │
-│ • Java 24           │ • PostgreSQL 15                  │
+│ • Java 21           │ • PostgreSQL 15                  │
 │ • Maven 3.9         │ • Database: vibecode_studio      │
 │ • Spring Boot       │ • User: vibecode                  │
 │ • Azure CLI         │ • Auto-initialization             │
@@ -149,11 +149,11 @@ When running with `dev` profile, you can also access the H2 in-memory database:
 ### Environment Variables
 - `SPRING_PROFILES_ACTIVE=dev` - Activates development profile
 - `AI_PROVIDER=mock` - Uses mock AI client for development (can be changed to `azure`)
-- `JAVA_HOME` - Java 24 installation path
+- `JAVA_HOME` - Java 21 installation path
 - `MAVEN_HOME` - Maven installation path
 - `NODE_PATH` - Node.js modules path for MCP servers
 
-**Note**: Java 24 and Maven are automatically added to PATH and available as standard commands (`java`, `javac`, `mvn`) in all terminal sessions within the Dev Container.
+**Note**: Java 21 and Maven are automatically added to PATH and available as standard commands (`java`, `javac`, `mvn`) in all terminal sessions within the Dev Container.
 
 #### Azure Configuration (Optional - for Azure AI integration)
 - `AZURE_CLI_AUTH=true` - Use Azure CLI authentication (recommended)
@@ -227,7 +227,7 @@ mcp inspect azure  # Requires Azure CLI authentication
 ### Java/Maven Issues
 1. Rebuild container to get latest Java setup
 2. Clear Maven cache: `mvn dependency:purge-local-repository`
-3. Check Java version: `java -version` (should be 24)
+3. Check Java version: `java -version` (should be 21)
 
 ### Performance Issues
 1. Increase Docker memory allocation (recommended: 4GB+)

@@ -41,12 +41,12 @@ RUN mkdir -p /usr/local/share/npm-global \
     && npm config set prefix '/usr/local/share/npm-global' \
     && echo 'export PATH=/usr/local/share/npm-global/bin:$PATH' >> /home/vscode/.bashrc
 
-# Install Java 24 and Maven via SDKMAN
+# Install Java 21 and Maven via SDKMAN
 USER vscode
 RUN bash -c "source /home/vscode/.sdkman/bin/sdkman-init.sh \
-    && sdk install java 24-open \
+    && sdk install java 21.0.5-tem \
     && sdk install maven 3.9.6 \
-    && sdk default java 24-open \
+    && sdk default java 21.0.5-tem \
     && sdk default maven 3.9.6"
 
 # Add SDKMAN, Java, and Maven to PATH for all sessions

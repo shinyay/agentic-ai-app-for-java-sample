@@ -23,7 +23,7 @@
       "settings": {
         "java.configuration.runtimes": [
           {
-            "name": "JavaSE-24",
+            "name": "JavaSE-21",
             "path": "/home/vscode/.sdkman/candidates/java/current",
             "default": true
           }
