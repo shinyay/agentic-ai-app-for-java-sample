@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: test
+
+# Test configuration with minimal dependencies
+logging:
+  level:
+    com.example.techassistant: DEBUG
+    org.springframework: WARN
+    
+techknowledge:
+  ai:
+    max-tokens: 100
+    temperature: 0.1
+    timeout: 5000
+  agents:
+    enabled: false
+    max-concurrent-executions: 1
