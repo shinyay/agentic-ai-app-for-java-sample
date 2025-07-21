@@ -1,0 +1,94 @@
+spring:
+  application:
+    name: techknowledge-assistant
+  profiles:
+    active: dev
+  
+  # Azure Spring Cloud Configuration
+  cloud:
+    azure:
+      keyvault:
+        secret:
+          enabled: true
+          endpoint: ${AZURE_KEYVAULT_ENDPOINT:}
+      cosmos:
+        database: ${AZURE_COSMOS_DATABASE:techknowledge}
+        endpoint: ${AZURE_COSMOS_ENDPOINT:}
+        key: ${AZURE_COSMOS_KEY:}
+        
+  # Security Configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AZURE_AD_ISSUER_URI:}
+          jwk-set-uri: ${AZURE_AD_JWK_SET_URI:}
+
+# Server Configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  error:
+    include-stacktrace: never
+    include-message: always
+
+# Management and Monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    com.example.techassistant: INFO
+    dev.langchain4j: DEBUG
+    com.azure: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# LangChain4j Configuration
+langchain4j:
+  azure:
+    openai:
+      api-key: ${AZURE_OPENAI_API_KEY:}
+      endpoint: ${AZURE_OPENAI_ENDPOINT:}
+      deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME:gpt-4}
+      api-version: ${AZURE_OPENAI_API_VERSION:2024-02-15-preview}
+  embedding-model:
+    azure-openai:
+      api-key: ${AZURE_OPENAI_API_KEY:}
+      endpoint: ${AZURE_OPENAI_ENDPOINT:}
+      deployment-name: ${AZURE_OPENAI_EMBEDDING_DEPLOYMENT:text-embedding-ada-002}
+
+# Application Specific Configuration
+techknowledge:
+  ai:
+    max-tokens: 4000
+    temperature: 0.7
+    timeout: 30000
+  vector-store:
+    azure:
+      search:
+        service-name: ${AZURE_SEARCH_SERVICE_NAME:}
+        api-key: ${AZURE_SEARCH_API_KEY:}
+        index-name: ${AZURE_SEARCH_INDEX_NAME:techknowledge-documents}
+  storage:
+    azure:
+      blob:
+        connection-string: ${AZURE_STORAGE_CONNECTION_STRING:}
+        container-name: ${AZURE_STORAGE_CONTAINER:documents}
+  agents:
+    enabled: true
+    max-concurrent-executions: 5
+    timeout: 300000

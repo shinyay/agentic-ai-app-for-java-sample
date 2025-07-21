@@ -1,0 +1,66 @@
+{
+  "name": "TechKnowledge Assistant Dev Container",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "techknowledge-assistant-dev",
+  "workspaceFolder": "/workspace",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true,
+      "username": "vscode",
+      "userUid": "1000",
+      "userGid": "1000"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-17",
+            "path": "/usr/local/openjdk-17"
+          }
+        ],
+        "java.compile.nullAnalysis.mode": "automatic",
+        "maven.executable.path": "/opt/maven/bin/mvn",
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      },
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-spring-boot-dashboard",
+        "vmware.vscode-spring-boot",
+        "vscjava.vscode-spring-initializr",
+        "redhat.java",
+        "vscjava.vscode-maven",
+        "ms-vscode.vscode-json",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.azure-account",
+        "ms-azuretools.vscode-azureresourcegroups",
+        "ms-azuretools.vscode-azureappservice",
+        "ms-azuretools.vscode-azurefunctions",
+        "github.copilot",
+        "github.copilot-chat"
+      ]
+    }
+  },
+
+  "forwardPorts": [8080, 5005],
+  "portsAttributes": {
+    "8080": {
+      "label": "Application",
+      "onAutoForward": "notify"
+    },
+    "5005": {
+      "label": "Debug",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "postCreateCommand": "echo 'Dev container setup complete!' && echo 'Verifying tools...' && java -version && mvn -version && az version && azd version && echo 'All tools ready: Java, Maven, Azure CLI (az), and Azure Developer CLI (azd)'",
+  
+  "remoteUser": "vscode"
+}

@@ -1,0 +1,30 @@
+spring:
+  profiles:
+    active: dev
+  cloud:
+    azure:
+      cosmos:
+        endpoint: http://localhost:8081
+        key: C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
+        database: techknowledge-dev
+      keyvault:
+        secret:
+          enabled: false
+
+# Override for development
+techknowledge:
+  ai:
+    temperature: 0.3
+  vector-store:
+    azure:
+      search:
+        service-name: dev-search
+        index-name: techknowledge-dev
+  agents:
+    max-concurrent-executions: 2
+
+logging:
+  level:
+    com.example.techassistant: DEBUG
+    dev.langchain4j: DEBUG
+    org.springframework.security: DEBUG
