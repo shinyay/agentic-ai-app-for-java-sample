@@ -11,7 +11,7 @@ TechKnowledge Assistant is a comprehensive enterprise-grade knowledge management
 ### Technology Stack
 - **Backend Framework**: Spring Boot 3.2+
 - **Java Version**: 17+
-- **AI Framework**: LangChain4j 0.25.0
+- **AI Framework**: LangChain4j 1.1.0
 - **Cloud Platform**: Microsoft Azure
 - **Build Tool**: Maven 3.9+
 - **Security**: Spring Security with OAuth2 support
@@ -210,7 +210,7 @@ mvn test -Dtest=TechnicalExpertServiceTest
 mvn test jacoco:report
 ```
 
-## 🌐 Azure Integration
+## 🌐 Azure Integration & Deployment
 
 This application is designed to integrate with the following Azure services:
 
@@ -219,6 +219,27 @@ This application is designed to integrate with the following Azure services:
 - **Azure Cosmos DB** - For document and conversation storage (planned)
 - **Azure Blob Storage** - For file storage (planned)
 - **Azure Key Vault** - For secrets management (planned)
+
+### 📖 Deployment Documentation
+
+For comprehensive Azure deployment instructions, including:
+- Azure OpenAI Service setup
+- Container Apps, App Service, and AKS deployment options
+- CI/CD pipeline configuration
+- Security best practices
+- Monitoring and troubleshooting
+
+See the **[Azure Deployment Guide](docs/azure-deployment.md)**
+
+### 🔧 Dev Container with Azure CLI
+
+This project includes a pre-configured Dev Container with:
+- Java 17 + Maven 3.9.6
+- **Azure CLI (az)** for Azure resource management
+- **Azure Developer CLI (azd)** for rapid deployment
+- VS Code extensions for Azure integration
+
+Click "Code" → "Open with Codespaces" to get started immediately with all Azure tools ready!
 
 ## 🔐 Security
 

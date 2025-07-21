@@ -38,6 +38,10 @@
         "vscjava.vscode-maven",
         "ms-vscode.vscode-json",
         "ms-azuretools.vscode-docker",
+        "ms-vscode.azure-account",
+        "ms-azuretools.vscode-azureresourcegroups",
+        "ms-azuretools.vscode-azureappservice",
+        "ms-azuretools.vscode-azurefunctions",
         "github.copilot",
         "github.copilot-chat"
       ]
@@ -56,7 +60,7 @@
     }
   },
 
-  "postCreateCommand": "echo 'Dev container setup complete! Java and Maven are ready to use.'",
+  "postCreateCommand": "echo 'Dev container setup complete!' && echo 'Verifying tools...' && java -version && mvn -version && az version && azd version && echo 'All tools ready: Java, Maven, Azure CLI (az), and Azure Developer CLI (azd)'",
   
   "remoteUser": "vscode"
 }
