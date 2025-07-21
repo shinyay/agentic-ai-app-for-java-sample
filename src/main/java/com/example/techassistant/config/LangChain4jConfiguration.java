@@ -1,8 +1,8 @@
 package com.example.techassistant.config;
 
-import dev.langchain4j.model.azure.AzureOpenAiChatModel;
-import dev.langchain4j.model.azure.AzureOpenAiEmbeddingModel;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -35,53 +35,57 @@ public class LangChain4jConfiguration {
     private Long timeoutMs;
 
     @Bean
-    public ChatLanguageModel chatLanguageModel() {
-        return AzureOpenAiChatModel.builder()
+    public ChatModel chatLanguageModel() {
+        return OpenAiChatModel.builder()
                 .apiKey(apiKey)
-                .endpoint(endpoint)
-                .deploymentName(deploymentName)
+                .baseUrl(endpoint + "/openai/deployments/" + deploymentName)
+                .modelName(deploymentName)
                 .maxTokens(maxTokens)
                 .temperature(temperature)
                 .timeout(Duration.ofMillis(timeoutMs))
-                .logRequestsAndResponses(true)
+                .logRequests(true)
+                .logResponses(true)
                 .build();
     }
 
     @Bean
     public EmbeddingModel embeddingModel() {
-        return AzureOpenAiEmbeddingModel.builder()
+        return OpenAiEmbeddingModel.builder()
                 .apiKey(apiKey)
-                .endpoint(endpoint)
-                .deploymentName(embeddingDeploymentName)
+                .baseUrl(endpoint + "/openai/deployments/" + embeddingDeploymentName)
+                .modelName(embeddingDeploymentName)
                 .timeout(Duration.ofMillis(timeoutMs))
-                .logRequestsAndResponses(true)
+                .logRequests(true)
+                .logResponses(true)
                 .build();
     }
 
     // Specialized models for different purposes
     @Bean("codeReviewModel")
-    public ChatLanguageModel codeReviewModel() {
-        return AzureOpenAiChatModel.builder()
+    public ChatModel codeReviewModel() {
+        return OpenAiChatModel.builder()
                 .apiKey(apiKey)
-                .endpoint(endpoint)
-                .deploymentName(deploymentName)
+                .baseUrl(endpoint + "/openai/deployments/" + deploymentName)
+                .modelName(deploymentName)
                 .maxTokens(maxTokens)
                 .temperature(0.3) // Lower temperature for more focused code analysis
                 .timeout(Duration.ofMillis(timeoutMs))
-                .logRequestsAndResponses(true)
+                .logRequests(true)
+                .logResponses(true)
                 .build();
     }
 
     @Bean("architectureModel")
-    public ChatLanguageModel architectureModel() {
-        return AzureOpenAiChatModel.builder()
+    public ChatModel architectureModel() {
+        return OpenAiChatModel.builder()
                 .apiKey(apiKey)
-                .endpoint(endpoint)
-                .deploymentName(deploymentName)
+                .baseUrl(endpoint + "/openai/deployments/" + deploymentName)
+                .modelName(deploymentName)
                 .maxTokens(maxTokens)
                 .temperature(0.5) // Balanced for architectural discussions
                 .timeout(Duration.ofMillis(timeoutMs))
-                .logRequestsAndResponses(true)
+                .logRequests(true)
+                .logResponses(true)
                 .build();
     }
 }

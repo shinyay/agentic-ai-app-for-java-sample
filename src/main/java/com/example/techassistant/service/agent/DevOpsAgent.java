@@ -1,6 +1,6 @@
 package com.example.techassistant.service.agent;
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -10,15 +10,15 @@ import java.util.ArrayList;
 @Service
 public class DevOpsAgent {
 
-    private final ChatLanguageModel chatModel;
+    private final ChatModel chatModel;
 
-    public DevOpsAgent(@Qualifier("architectureModel") ChatLanguageModel chatModel) {
+    public DevOpsAgent(@Qualifier("architectureModel") ChatModel chatModel) {
         this.chatModel = chatModel;
     }
 
     public AgentResponse checkApplicationHealth(String appName) {
         String prompt = buildHealthCheckPrompt(appName);
-        String response = chatModel.generate(prompt);
+        String response = chatModel.chat(prompt);
         
         return AgentResponse.builder()
                 .toolName("check_health")
@@ -29,7 +29,7 @@ public class DevOpsAgent {
 
     public AgentResponse analyzeInfrastructure(String infrastructure) {
         String prompt = buildInfrastructureAnalysisPrompt(infrastructure);
-        String response = chatModel.generate(prompt);
+        String response = chatModel.chat(prompt);
         
         return AgentResponse.builder()
                 .toolName("analyze_infrastructure")
@@ -40,7 +40,7 @@ public class DevOpsAgent {
 
     public AgentResponse generateDeploymentScript(String appName, String environment, String platform) {
         String prompt = buildDeploymentScriptPrompt(appName, environment, platform);
-        String response = chatModel.generate(prompt);
+        String response = chatModel.chat(prompt);
         
         return AgentResponse.builder()
                 .toolName("generate_deployment")

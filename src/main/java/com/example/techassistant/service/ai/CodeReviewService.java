@@ -1,6 +1,6 @@
 package com.example.techassistant.service.ai;
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 @Service
 public class CodeReviewService {
 
-    private final ChatLanguageModel codeReviewModel;
+    private final ChatModel codeReviewModel;
 
-    public CodeReviewService(@Qualifier("codeReviewModel") ChatLanguageModel codeReviewModel) {
+    public CodeReviewService(@Qualifier("codeReviewModel") ChatModel codeReviewModel) {
         this.codeReviewModel = codeReviewModel;
     }
 
@@ -20,7 +20,7 @@ public class CodeReviewService {
         String systemPrompt = buildCodeReviewPrompt(language, analysisType);
         String fullPrompt = systemPrompt + "\n\nCode to review:\n```" + language + "\n" + code + "\n```";
         
-        String reviewResponse = codeReviewModel.generate(fullPrompt);
+        String reviewResponse = codeReviewModel.chat(fullPrompt);
         
         return parseCodeReviewResponse(reviewResponse, code, language, analysisType);
     }
@@ -29,7 +29,7 @@ public class CodeReviewService {
         String systemPrompt = buildImprovementPrompt(language);
         String fullPrompt = systemPrompt + "\n\nCode to improve:\n```" + language + "\n" + code + "\n```";
         
-        String reviewResponse = codeReviewModel.generate(fullPrompt);
+        String reviewResponse = codeReviewModel.chat(fullPrompt);
         String improvedCode = generateImprovedCode(code, language);
         
         CodeReviewResult result = parseCodeReviewResponse(reviewResponse, code, language, AnalysisType.COMPREHENSIVE);
@@ -80,7 +80,7 @@ public class CodeReviewService {
                 "security, performance, and maintainability:\n\n```" + language + "\n" + originalCode + "\n```\n\n" +
                 "Return only the improved code without explanation.";
         
-        return codeReviewModel.generate(prompt);
+        return codeReviewModel.chat(prompt);
     }
 
     private CodeReviewResult parseCodeReviewResponse(String response, String originalCode, 

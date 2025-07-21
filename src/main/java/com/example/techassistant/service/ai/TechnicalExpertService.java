@@ -1,44 +1,44 @@
 package com.example.techassistant.service.ai;
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TechnicalExpertService {
 
-    private final ChatLanguageModel generalModel;
-    private final ChatLanguageModel codeReviewModel;
-    private final ChatLanguageModel architectureModel;
+    private final ChatModel generalModel;
+    private final ChatModel codeReviewModel;
+    private final ChatModel architectureModel;
 
     public TechnicalExpertService(
-            ChatLanguageModel generalModel,
-            @Qualifier("codeReviewModel") ChatLanguageModel codeReviewModel,
-            @Qualifier("architectureModel") ChatLanguageModel architectureModel) {
+            ChatModel generalModel,
+            @Qualifier("codeReviewModel") ChatModel codeReviewModel,
+            @Qualifier("architectureModel") ChatModel architectureModel) {
         this.generalModel = generalModel;
         this.codeReviewModel = codeReviewModel;
         this.architectureModel = architectureModel;
     }
 
     public String askTechnicalQuestion(String question, ExpertiseArea expertiseArea) {
-        ChatLanguageModel selectedModel = selectModelForExpertise(expertiseArea);
+        ChatModel selectedModel = selectModelForExpertise(expertiseArea);
         String systemPrompt = buildSystemPrompt(expertiseArea);
         String fullPrompt = systemPrompt + "\n\nUser Question: " + question;
         
-        return selectedModel.generate(fullPrompt);
+        return selectedModel.chat(fullPrompt);
     }
 
     public TechnicalResponse askTechnicalQuestionWithContext(String question, 
                                                            ExpertiseArea expertiseArea, 
                                                            String context) {
-        ChatLanguageModel selectedModel = selectModelForExpertise(expertiseArea);
+        ChatModel selectedModel = selectModelForExpertise(expertiseArea);
         String systemPrompt = buildSystemPrompt(expertiseArea);
         String contextualPrompt = systemPrompt + 
                 "\n\nContext Information:\n" + context +
                 "\n\nUser Question: " + question +
                 "\n\nPlease provide a comprehensive answer based on the context provided and your expertise.";
         
-        String response = selectedModel.generate(contextualPrompt);
+        String response = selectedModel.chat(contextualPrompt);
         
         return TechnicalResponse.builder()
                 .answer(response)
@@ -48,7 +48,7 @@ public class TechnicalExpertService {
                 .build();
     }
 
-    private ChatLanguageModel selectModelForExpertise(ExpertiseArea expertiseArea) {
+    private ChatModel selectModelForExpertise(ExpertiseArea expertiseArea) {
         return switch (expertiseArea) {
             case CODE, SECURITY -> codeReviewModel;
             case ARCHITECTURE, PERFORMANCE -> architectureModel;
