@@ -72,6 +72,33 @@ mvn spring-boot:run
 
 The application will start on `http://localhost:8080`
 
+### 🐳 Development with Codespaces/Dev Containers
+
+For immediate verification and development in GitHub Codespaces or VS Code Dev Containers:
+
+1. **GitHub Codespaces**: Click the "Code" button and select "Open with Codespaces"
+2. **VS Code**: Open the repository in VS Code and select "Reopen in Container"
+
+The Dev Container includes:
+- ✅ Java 17 JDK and Maven 3.9.6 pre-installed
+- ✅ VS Code Java extensions
+- ✅ Debug configuration (port 5005)
+- ✅ Application port forwarding (8080)
+
+Once the container is running, you can immediately use `java` and `mvn` commands:
+
+```bash
+# Verify tools are available
+java -version
+mvn -version
+
+# Build and run the application
+mvn clean compile
+mvn spring-boot:run
+```
+
+See [.devcontainer/README.md](.devcontainer/README.md) for detailed setup information.
+
 ## 📋 API Documentation
 
 ### Health and Information Endpoints
